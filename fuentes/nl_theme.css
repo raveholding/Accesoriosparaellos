@@ -1,0 +1,41 @@
+/* ===== Urban · Minimalista / Alta Moda (panel) ===== */
+:root{--ink:#111;--gold:#111;--gold2:#000;--bg:#f7f7f5;--card:#fff;--line:#e6e6e3;--mut:#6f6f6f;--r:0px;--okbg:#f0f0ee;--warnbg:#f0f0ee;--redbg:#f0f0ee}
+html,body{font-family:'Jost','Futura','Helvetica Neue',Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Cormorant Garamond','Didot',Georgia,serif;font-weight:400;letter-spacing:.005em;text-transform:none}
+h1{font-size:2.3rem;font-weight:300}h2{font-size:1.6rem;font-weight:300}h3{font-size:1.25rem;font-weight:500}
+.btn,.card,input,select,textarea,.dlg,.kpi,.tag,.rtab,.pbtn,.fk,.node,.lbox,.tw,.toast,.chip{border-radius:0}
+.btn{border:1px solid var(--ink);background:transparent;font-weight:400;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;transition:background .3s,color .3s}
+.btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.gold,.btn.dark,.btn.on,.rtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.gold:hover,.btn.dark:hover{background:#fff;color:var(--ink)}
+.btn.sm{font-size:.7rem}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.card,.kpi,.dlg,.lbox{background:#fff;border:1px solid var(--line);box-shadow:none}
+.card{padding:1.4rem}
+.kpi b{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:2.1rem;letter-spacing:0}
+.kpi small,small{letter-spacing:.04em}
+input,select,textarea{background:#fff;border:1px solid #d6d6d2;font-weight:300}
+.rtab{border:0;border-bottom:1px solid transparent;background:transparent;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}
+.rtab.on{background:transparent;color:var(--ink);border-bottom:1px solid var(--ink)}
+#side{background:#111!important;border:0}
+#side a{border-radius:0;letter-spacing:.04em;font-weight:300}
+#side a.on{background:#fff;color:#111}
+#side a.on svg{stroke:#111}
+#side .brand span{font:300 20px/1.1 'Cormorant Garamond',Georgia,serif;letter-spacing:.16em;text-transform:uppercase}
+#top{background:#fff!important;border-bottom:1px solid var(--line);color:#111}
+#top,#top *{--mut:#6f6f6f}#top small,#top .sub,#top .mut{color:#6f6f6f}
+.tag{background:transparent;border:1px solid var(--line);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.tag.sim{background:#fff;color:#111;border:1px dashed #111}
+th{font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:.68rem}
+html{font-synthesis-weight:none}
+html[data-theme=dark]{--ink:#f2f2f0;--gold:#fff;--gold2:#e6e6e6;--bg:#0c0c0c;--card:#151515;--line:#2a2a2a;--mut:#a5a5a5;--okbg:#1c1c1c;--warnbg:#1c1c1c;--redbg:#1c1c1c}
+html[data-theme=dark] .card,html[data-theme=dark] .kpi,html[data-theme=dark] .dlg{background:#151515;border-color:#2a2a2a}
+html[data-theme=dark] .btn{border-color:#f2f2f0}
+html[data-theme=dark] .btn.gold,html[data-theme=dark] .btn.dark,html[data-theme=dark] .btn.on{background:#f2f2f0;color:#0c0c0c}
+html[data-theme=dark] .btn:hover{background:#f2f2f0;color:#0c0c0c}
+html[data-theme=dark] #side a.on{background:#f2f2f0;color:#111}
+html[data-theme=dark] #top{background:#111!important;color:#f2f2f0}
+html[data-theme=dark] #top,html[data-theme=dark] #top *{--mut:#bbb}html[data-theme=dark] #top small,html[data-theme=dark] #top .mut{color:#bbb}
+html[data-theme=dark] input,html[data-theme=dark] select,html[data-theme=dark] textarea{background:#151515;border-color:#333}
+html[data-theme=dark] .tag.sim{background:#151515;color:#f2f2f0;border-color:#f2f2f0}
+.kpi b,.nl-h,.nl-price{font-variant-numeric:lining-nums}
