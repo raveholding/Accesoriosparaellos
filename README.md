@@ -10,6 +10,8 @@ Base: demo Urban (SVBUrbanDemo). Cambios:
 - Promos: 2x1 en gorras, −15 % con 3 productos, look completo −10 %.
 - Mayorista del rubro: presentaciones Pack x6 / Curva x12 / Bulto x48 y precio por mayor según importe (desde $ 150.000 −15 %, desde $ 300.000 −25 %), en el mostrador y en el carrito de la tienda.
 
+- Menú público rediseñado como app de compra: encabezado compacto con buscador y carrito, banner deslizable (novedades, cupón, mayorista), categorías con ícono, «Más vendidos», favoritos (corazón), calificaciones de ejemplo, ficha con colores/talles/beneficios y botones «Agregar al carrito» / «Comprar ahora», carrito con miniaturas y barra inferior (Inicio, Categorías, Favoritos, Carrito, WhatsApp). Paleta: verde petróleo #14302C, arena #F6F4EF, oro #B8924A.
+
 Armado: `./build.sh` parte de la demo Urban original y aplica `fuentes/patch_ur.py` + `fuentes/patch_ape.py`.
 
 Límites: todo dato es de ejemplo (videos, vistas, precios, stock); las ilustraciones no son fotos (se cargan en Productos → Fotos y video); WhatsApp, pagos, envíos y facturación son simulados. Pruebas en Chromium; no se probó en Safari ni en celulares físicos.
