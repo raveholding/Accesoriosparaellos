@@ -130,7 +130,7 @@ function paintGrid(){
     var head=q1('.section-head',sec);head&&head.parentNode?head.parentNode.insertBefore(g,head.nextSibling):sec.appendChild(g);
     var cnt=document.getElementById('count-'+cat);if(cnt)cnt.textContent=ids.length;});
   var all=document.getElementById('count-all');if(all)all.textContent=ORDER.length;
-  reveal(document);brandName();meBtn();tkStrip();filtBar();apBuild();filterGrid();}
+  reveal(document);brandName();meBtn();tkStrip();filtBar();apBuild();filterGrid();apOn();}
 /* ---- filtros: color, talle, precio, stock y orden ---- */
 var FS={fav:false,g:'all',cols:{},sizes:{},pmin:'',pmax:'',stock:false,sort:''};try{FS.g=localStorage.getItem('nl.g')||'all';if(['all','m','h'].indexOf(FS.g)<0)FS.g='all';}catch(e){}
 var GEN=[['all','Todo'],['m','Mujer'],['h','Hombre']];
@@ -561,6 +561,8 @@ function apNav(){if(q1('.ap-nav'))return;var n=document.createElement('nav');n.c
 function apHeart(){document.addEventListener('click',function(e){var h=e.target.closest&&e.target.closest('.ap-heart');if(!h)return;e.stopPropagation();e.preventDefault();var o=apFav(),f=h.getAttribute('data-fam');if(o[f])delete o[f];else o[f]=1;apSaveFav(o);
     qa('.ap-heart[data-fam="'+f+'"]').forEach(function(x){x.classList.toggle('on',!!o[f]);x.setAttribute('aria-pressed',!!o[f]);});flash(o[f]?'Guardado en favoritos':'Quitado de favoritos');if(FS.fav)filterGrid();},true);}
 function apCartThumbs(){var box=q1('#cart-items');if(!box||!D)return;qa('.cp-item[data-pid]',box).forEach(function(it){if(q1('.ap-th',it))return;var c=CAT();var p=c&&(c.productos||[]).filter(function(x){return x.id===it.getAttribute('data-pid');})[0];if(!p||!p.nl)return;var f=FAMS[p.nl.fam];if(!f)return;var th=document.createElement('span');th.className='ap-th';th.innerHTML=garment(f.id,colHex(p.nl.color),f.cat,'f');it.insertBefore(th,it.firstChild);});}
+function apOn(){document.documentElement.classList.add('ap-on');}
+setTimeout(apOn,2500);
 function apBuild(){apHead();var tb=q1('#toolbar');if(!tb||!D)return;
   var hero=apHero(),cats=apCats(),best=apBest();var tk=q1('.nl-tk'),me=q1('.nl-me'),tools=q1('.nl-tools');
   var chain=[tb,hero,cats,tk,me,tools,best].filter(Boolean);
