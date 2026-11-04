@@ -69,6 +69,17 @@ for a,b in [("{id:'d',name:'Display'},{id:'f',name:'Fardo'},{id:'p',name:'Pallet
  ("Display/Fardo/Pallet","Pack/Curva/Bulto"),("«2 Pallet + 3 Fardo + 5 u»","«2 Bulto + 3 Curva + 5 u»")]:
     s=s.replace(a,b)
 s=s.replace('Vi%20el%20men%C3%BA%20digital%20de%20RAVE%20y%20quiero%20uno%20para%20mi%20negocio.','Vi%20la%20demo%20de%20Accesorios%20para%20Ellos%20(Sistema%20VB)%20y%20quiero%20una%20tienda%20as%C3%AD%20para%20mi%20negocio.')
+# ---- 4) tema del panel / acceso: mismo estilo que el menú público ----
+HEX=[('#0a0a0a','#14302C'),('#0b0b0b','#14302C'),('#111111','#14302C'),('#111','#14302C'),('#000000','#14302C'),('#000','#14302C'),
+ ('#f4f4f4','#F6F4EF'),('#f5f5f3','#F6F4EF'),('#f7f7f5','#F6F4EF'),('#f2f2f0','#EFECE4'),('#ebebe8','#EFECE4'),
+ ('#e2e2e2','#E6E1D6'),('#e2e2df','#E6E1D6'),('#e6e6e3','#E6E1D6'),('#e8e8e5','#E6E1D6'),('#e4e4e4','#E6E1D6'),
+ ('#cfcfcb','#D9D3C5'),('#6f6f6f','#66706B'),('#666666','#66706B'),('#6b6b6b','#66706B'),('#6e6e6e','#66706B')]
+parts=re.split(r'(data:[a-z/+-]+;base64,[A-Za-z0-9+/=]+)',s)
+for k in range(0,len(parts),2):
+    for a,b in HEX: parts[k]=re.sub(re.escape(a)+r'(?![0-9a-fA-F])',b,parts[k],flags=re.I)
+s=''.join(parts)
+_css=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'ap_panel.css'),encoding='utf-8').read()
+if 'id="ap-theme"' not in s: s=s.replace('</head>','<style id="ap-theme">'+_css+'</style></head>',1)
 s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)

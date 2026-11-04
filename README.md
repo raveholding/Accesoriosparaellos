@@ -17,3 +17,7 @@ Armado: `./build.sh` parte de la demo Urban original y aplica `fuentes/patch_ur.
 Límites: todo dato es de ejemplo (videos, vistas, precios, stock); las ilustraciones no son fotos (se cargan en Productos → Fotos y video); WhatsApp, pagos, envíos y facturación son simulados. Pruebas en Chromium; no se probó en Safari ni en celulares físicos.
 
 Desarrollado por VINCULAR BUSINESS · (387) 4484132 · vincularbusiness@gmail.com
+
+
+## Tema del panel y del acceso del equipo
+El panel (`#acceso` y todas las pantallas) usa el mismo lenguaje visual que el menú público: verde petróleo `#14302C`, arena `#F6F4EF`, oro `#B8924A`, tarjetas blancas redondeadas y tipografía Jost. Estilos en `fuentes/ap_panel.css` (se inyecta con `patch_ape.py`, que además reemplaza los negros/grises fijos por la paleta). Incluye modo oscuro en petróleo profundo.
