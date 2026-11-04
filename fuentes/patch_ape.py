@@ -69,6 +69,7 @@ for a,b in [("{id:'d',name:'Display'},{id:'f',name:'Fardo'},{id:'p',name:'Pallet
  ("Display/Fardo/Pallet","Pack/Curva/Bulto"),("«2 Pallet + 3 Fardo + 5 u»","«2 Bulto + 3 Curva + 5 u»")]:
     s=s.replace(a,b)
 s=s.replace('Vi%20el%20men%C3%BA%20digital%20de%20RAVE%20y%20quiero%20uno%20para%20mi%20negocio.','Vi%20la%20demo%20de%20Accesorios%20para%20Ellos%20(Sistema%20VB)%20y%20quiero%20una%20tienda%20as%C3%AD%20para%20mi%20negocio.')
+s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)
 print('ok',len(s))
