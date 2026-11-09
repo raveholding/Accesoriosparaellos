@@ -57,7 +57,7 @@ const UR_SECS=[
   ['prod','Productos','box',[['inventario','Inventario'],['moda','Talles y stock'],['ur_fotos','Fotos y video'],['proveedores','Proveedores y compras'],['taller','Talleres y producción'],['impex','Importar / Exportar']]],
   ['pago','Pago Nube','card',[['ur_pagos','Cobros y medios de pago']]],
   ['envio','Envío Nube','truck',[['ur_envios','Envíos y tarifas']],null,'Nuevo'],
-  ['cli','Clientes','users',[['clientes','Clientes'],['fidel','Fidelización']]],
+  ['cli','Clientes','users',[['clientes','Clientes'],['fidel','Club y sellos'],['fidplus','Niveles, cumpleaños y juegos'],['monedero','Monedero y gift cards']]],
   ['desc','Descuentos','tag',[['cupones','Cupones y membresías'],['cli360','Promociones y Cliente 360']]],
   ['mkt','Marketing','mega',[['ur_mkt','Campañas y audiencias']]]]},
  {t:'Canales de venta',items:[
@@ -83,7 +83,7 @@ const urItemOf=id=>{for(const s of UR_SECS)for(const it of s.items)if(it[3].some
 const urBadge={badgeVentas:()=>{try{return NL().orders.filter(o=>['nuevo','pagado','picking','packing'].includes(o.state)).length;}catch(e){return 0;}},
  badgeChat:()=>UR().chat.reduce((a,c)=>a+(c.unread||0),0)};
 function urSideHTML(id){const cur=urItemOf(id);
- let h=`<div class="brand"><img src="${LOGO_MENU}" alt="Urban" style="width:64px;height:25px;object-fit:contain;border-radius:0;background:#F4EFE7"><span>Sistema Urban</span></div>`;
+ let h=`<a class="brand" href="#panel/inicio" title="Ir al Resumen" aria-label="Ir al Resumen" style="text-decoration:none"><img src="${LOGO_MENU}" alt="Urban" style="width:64px;height:25px;object-fit:contain;border-radius:0;background:#F4EFE7"><span>Sistema Urban</span></a>`;
  urItems().forEach(sec=>{if(sec.t)h+=`<div class="sec">${esc(sec.t)}</div>`;
   sec.items.forEach(it=>{const n=it.bd?urBadge[it.bd]():0;
    h+=`<a data-act="nav" data-id="${it.tabs[0][0]}" class="${it.key===cur?'on':''}" tabindex="0" role="link">${ico(it.icon)}<span>${esc(it.t)}</span>${n?`<em class="ur-b">${n}</em>`:''}${it.tag?`<em class="ur-n">${esc(it.tag)}</em>`:''}</a>`;});});

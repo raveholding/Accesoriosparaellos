@@ -13,14 +13,13 @@ if B in s:
     i=s.index(B);j=s.index(E)+len(E)+1
     s=s[:i]+block+s[j:]
 else:
-    anchor='(async()=>{if(CLOUD.on||'
+    anchor='(async()=>{if(typeof csIsRoute===' if '(async()=>{if(typeof csIsRoute===' in s else '(async()=>{if(CLOUD.on||'
     assert s.count(anchor)==1,('ancla',s.count(anchor))
     s=s.replace(anchor,block+anchor)
 # menú lateral
 if "innerHTML=urSideHTML(id)" not in s:
-    a=" $('#side').innerHTML=`<div class=\"brand\">"
-    b="\n const s=openSess();"
-    i=s.index(a);j=s.index(b,i)
+    a=" $('#side').innerHTML=`"
+    i=s.index(a);j=s.index("`;\n",i)+2
     s=s[:i]+" $('#side').innerHTML=urSideHTML(id);"+s[j:]
 if "urAfter(id);$('#side')" not in s:
     a="sc.after&&sc.after();$('#side')"

@@ -21,3 +21,14 @@ Desarrollado por VINCULAR BUSINESS · (387) 4484132 · vincularbusiness@gmail.co
 
 ## Tema del panel y del acceso del equipo
 El panel (`#acceso` y todas las pantallas) usa el mismo lenguaje visual que el menú público: verde petróleo `#14302C`, arena `#F6F4EF`, oro `#B8924A`, tarjetas blancas redondeadas y tipografía Jost. Estilos en `fuentes/ap_panel.css` (se inyecta con `patch_ape.py`, que además reemplaza los negros/grises fijos por la paleta). Incluye modo oscuro en petróleo profundo.
+
+
+## Actualización de caja y club/fidelización (Sistema VB V26.59, 2026-11-09)
+Se tomó el código fuente único actualizado (Almacén RAVE, prompt `SISTEMA_VB_26F.md` hasta V26.59) y se aplicaron **sólo caja y club/fidelización**:
+- **Caja y cobro:** importe recibido obligatorio en efectivo (debajo del total, botón «Justo», F12 deja el cursor ahí); Fiado y Cuenta corriente separados con vencimiento; cortes X numerados y corte Z correlativo; apertura de cajón; recargos/descuentos por medio de pago (ejemplo apagado); pantalla del cliente; aviso de número de caja ocupado; el cursor vuelve a «Buscar artículo».
+- **Club y fidelización:** niveles Bronce/Plata/Oro, cumpleaños automático, monedero digital y gift cards, Día de Cuenta Comercio (cashback), ruleta/trivia, tarjeta digital del cliente a pantalla completa (`#mitarjeta`) que se actualiza sola, WhatsApp al cliente con su saldo desde la ficha, datos para facturar del cliente.
+- **Fuera de esta actualización:** presupuestos y mermas (no figuran en el menú ni en Vender) y el Centro Inteligente (no se compila).
+- WhatsApp de ejemplo de la tienda: (387) 4484132 (Vincular Business). Base local nueva `svb-accesorios-demo-v3`.
+
+Cómo se arma: `AlmacenRAVE/fuente/build.py demo` sin Centro Inteligente → `fuentes/build_newlook.py` → `./build.sh` (patch_ur.py + patch_ape.py).
+Pruebas: panel 159/159, tienda 28/28; del sistema base `xz1`, `ck1`, `wa1`, `fc1`, `fo1`, `fx1` y `mt1` pasan salvo diferencias de datos del rubro (promos y nivel Oro de las clientas de ejemplo, menú propio).

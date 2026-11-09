@@ -58,7 +58,7 @@ s=s.replace('</head>','<style>'+THEME+'</style></head>',1)
 n0=len(re.findall(r'<link[^>]*fonts\.googleapis\.com/css2[^>]*>',s))
 s=re.sub(r'<link[^>]*fonts\.googleapis\.com/css2[^>]*>','',s)
 print('links de fuentes quitados',n0)
-s=re.sub(r'Georgia(,\s*"Times New Roman")?(,\s*serif)?',"'Cormorant Garamond',Georgia,serif",s)
+s=re.sub(r'Georgia(,\s*"Times New Roman")?(,\s*serif)?',"Cormorant Garamond,Georgia,serif",s)  # sin comillas: no rompe cadenas JS ni atributos
 s=s.replace("'Playfair Display'","'Cormorant Garamond'").replace('Poppins','Jost')
 sub1('body.age-locked{ overflow:hidden; }','body.age-locked{ overflow:auto !important; } #age-gate,.alc-legend,.alc-notice{ display:none !important; }')
 sub1('const inj=`<script>window.__QS=${JSON.stringify(qs)};<\\/script>','const inj=`<script>try{sessionStorage.setItem("rave_age18","1")}catch(e){}window.__QS=${JSON.stringify(qs)};<\\/script>',1)
@@ -75,7 +75,7 @@ sub1('function applyBenefit(','function applyBenefit0(')
 sub1('function pubCatalog(){','function pubCatalog0(){')
 sub1('function commitSale(','function commitSale0(')
 # --- inyección antes del arranque
-anchor='(async()=>{if(CLOUD.on||'
+anchor='(async()=>{if(typeof csIsRoute===' if '(async()=>{if(typeof csIsRoute===' in s else '(async()=>{if(CLOUD.on||'
 assert s.count(anchor)==1
 mods='\n'.join(rd(f) for f in ['nl_data.js','nl_logic.js','nl_pub.js','nl_seed.js','nl_screens1.js','nl_screens2.js','nl_screens3.js'])
 inj=mods+'\nwindow.__NLREADY=true;\n'

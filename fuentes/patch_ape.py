@@ -55,7 +55,7 @@ rep("pay:NL_PUB.pay()};","pay:NL_PUB.pay(),tk:nlTikTok(),welcome:nlWelcome(),may
 # ---- 3) marca (sólo fuera de imágenes embebidas) ----
 parts=re.split(r'(data:[a-z/+-]+;base64,[A-Za-z0-9+/=]+)',s)
 SW=[('#F4EFE7','#F5F5F3'),('#FBF8F3','#FFFFFF'),('#E7DDCF','#E8E8E5'),('#CFC3B2','#CFCFCB'),('#1D1B19','#0A0A0A'),('#6F675C','#6B6B6B'),('#B4553A','#8A6D1F'),('#964329','#6E5517'),('#DDD2C2','#E2E2DF'),('#EFE6D8','#EEEEEC'),('#E2D6C4','#E2E2DF'),('#15130F','#0A0A0A'),('rgba\\(29,27,25,','rgba(10,10,10,'),('rgba\\(251,248,243,','rgba(255,255,255,')]
-TX=[('Sistema Urban','Sistema VB'),('SVBUrbanDemo','SVBAccesoriosDemo'),('rave-svburban-demo-v3','svb-accesorios-demo-v2'),('Urban Salta (demo de ejemplo)','Accesorios para Ellos (demo de ejemplo)'),
+TX=[('Sistema Urban','Sistema VB'),('SVBUrbanDemo','Accesoriosparaellos'),('rave-svburban-demo-v3','svb-accesorios-demo-v3'),('Urban Salta (demo de ejemplo)','Accesorios para Ellos (demo de ejemplo)'),
  ('Moda · Salta Capital','Accesorios y moda'),('Fashion · Salta, Argentina','Accessories & fashion'),('(dirección de ejemplo) · Salta Capital','(dirección de ejemplo)'),
  ('@urban.ropa','@accesorios_para_ellos'),('URBAN','ACCESORIOS PARA ELLOS'),('Urban','Accesorios para Ellos'),
  ('width:64px;height:25px;object-fit:contain;border-radius:0;background:#F4EFE7','width:34px;height:34px;object-fit:contain;border-radius:0')]
@@ -80,8 +80,10 @@ for k in range(0,len(parts),2):
 s=''.join(parts)
 _css=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'ap_panel.css'),encoding='utf-8').read()
 if 'id="ap-theme"' not in s: s=s.replace('</head>','<style id="ap-theme">'+_css+'</style></head>',1)
+s=s.replace('(no se acumulan). El tabaco queda afuera.</p>','(no se acumulan).</p>')  # V26.54: el texto de niveles no menciona tabaco en este rubro
+rep("phone:'',wa:'',ig:'',fb:'',caja:1,regId:'r1'","phone:'(387) 4484132',wa:'5493874484132',ig:'',fb:'',caja:1,regId:'r1'")  # WhatsApp de ejemplo (Vincular Business) para que la demo reciba pedidos y mensajes
+rep("function qtCartBtn(){if(!pos.lines.length){pos.quote='';return'';}","function qtCartBtn(){if(!pos.lines.length||true){pos.quote='';return'';}")  # esta actualización es sólo caja y club: presupuestos queda fuera
 s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)
 print('ok',len(s))
-
