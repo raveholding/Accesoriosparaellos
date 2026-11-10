@@ -147,6 +147,10 @@ for k in range(0,len(parts),2):
 s=''.join(parts)
 # accesorios de talle único: stock de vidriera realista (algunos quedan bajos a propósito para ver el aviso)
 rep("  let loc=Math.floor(r()*6*pop),dep=Math.floor(r()*14*pop),onl=Math.floor(r()*7*pop);\n","  let loc=Math.floor(r()*6*pop),dep=Math.floor(r()*14*pop),onl=Math.floor(r()*7*pop);\n  if(sz==='U'){loc=(i%7===3)?Math.floor(r()*4):6+Math.floor(r()*16);dep=4+Math.floor(r()*20);}else{loc=(i%9===4)?Math.floor(r()*3):5+Math.floor(r()*8);dep=3+Math.floor(r()*10);}\n")
+# sin PedidosYa: el comercio reparte por cadetería propia y Correo Argentino (2026-11-10)
+rep('<div class="card kpi ux-k"><span>Pedidos delivery (PedidosYa)</span><b>${T.pya}</b><small>en curso</small></div>',
+    '<div class="card kpi ux-k"><span>Pedidos online por enviar</span><b>${(()=>{try{return NL().orders.filter(o=>!["entregado","cancelado","devuelto"].includes(o.status)).length;}catch(e){return 0;}})()}</b><small>cadetería y Correo Argentino</small></div>')
+s=s.replace('Nada se envía a Mercado Pago, MODO, PedidosYa ni Google','Nada se envía a Mercado Pago, MODO, Correo Argentino ni Google')
 s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)

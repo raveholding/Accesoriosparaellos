@@ -92,3 +92,11 @@ html:not([data-theme=dark]) #side a.ux-pos-btn:hover,html:not([data-theme=dark])
 html:not([data-theme=dark]) #side a.ux-pos-btn.on svg,html:not([data-theme=dark]) #side a.ux-pos-btn:hover svg{stroke:#fff}
 html:not([data-theme=dark]) #side .ux-sec{color:#4F5A55;font-weight:700;letter-spacing:.04em}
 html:not([data-theme=dark]) #side .ux-sec:hover{color:#14302C;background:#F3F0E8}
+
+/* menú del celular: fondo para cerrarlo y botón «Cerrar menú» */
+#side-bd{display:none}
+#side .side-x{display:none}
+@media (max-width:900px){
+ #side-bd.on{display:block;position:fixed;inset:0;background:rgba(20,48,44,.35);z-index:29}
+ #side.open .side-x{display:block;width:calc(100% - .4rem);margin:0 .2rem .6rem;min-height:44px;background:#fff;color:#14302C;border:1px solid #E6E1D6}
+}

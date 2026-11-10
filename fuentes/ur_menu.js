@@ -95,7 +95,13 @@ function urSideHTML(id){const cur=urItemOf(id);
  return h;}
 /* V26.61: los avisos de la barra se actualizan solos cada 5 s también en este menú */
 setInterval(()=>{try{if(!user||!$('#side')||$('#panel').hidden)return;urItems().forEach(sec=>sec.items.forEach(it=>{const a=document.querySelector('#side a[data-urk="'+it.key+'"] .ux-bdw');if(a){const h=urUxBadge(it);if(a.innerHTML!==h)a.innerHTML=h;}}));}catch(e){}},5000);
-function urAfter(id){if(id==='menuadmin'||id==='diseno'){$('#view').insertAdjacentHTML('afterbegin',`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con carrito y pedido por WhatsApp):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`);}return;
+function urNoPya(){try{const v=document.getElementById('view');if(!v)return;
+ v.querySelectorAll('option[value=pedidosya]').forEach(o=>o.remove());
+ v.querySelectorAll('[data-ent=pedidosya]').forEach(b=>{const tr=b.closest('tr');if(tr)tr.remove();});
+ v.querySelectorAll('h3,summary b,.ux-chip').forEach(h=>{if(h.textContent.trim()!=='PedidosYa')return;
+  if(h.classList.contains('ux-chip')){h.remove();return;}const c=h.closest('details')||h.closest('.card');if(c)c.remove();});
+}catch(e){}}
+function urAfter(id){urNoPya();if(id==='menuadmin'||id==='diseno'){$('#view').insertAdjacentHTML('afterbegin',`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con carrito y pedido por WhatsApp):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`);}return;
  /* (2026-11-10) las pestañas propias se reemplazan por la barra del sistema base */
  const key=urItemOf(id);if(!key)return;let it=null;urItems().forEach(s=>s.items.forEach(i=>{if(i.key===key)it=i;}));if(!it)return;
  /* V26.61: si la pantalla ya trae sus pestañas de grupo (Gestión de caja, Club), el menú muestra una sola pestaña para todo el grupo */
@@ -380,5 +386,22 @@ A.urVidDel=()=>{delete UR().video[URUI.ph.fam];save();urPhPaint();};
   moda:'Variantes y ubicaciones',ur_fotos:'Fotos y video',ur_envios:'Envíos y tarifas',cli360:'Cliente 360 y promos',ur_chat:'Mensajes',ur_mkt:'Campañas y audiencias',ur_ruleta:'Ruleta y gamificación',
   menuadmin:'Tienda online',diseno:'Diseño de la tienda',ur_tiktok:'TikTok',ur_igfb:'Instagram y Facebook',ur_wa:'WhatsApp',ur_gshop:'Google Shopping',ur_gpt:'ChatGPT Ads',ur_pin:'Pinterest',ur_mktp:'Marketplaces',ur_apps:'Aplicaciones'});
  /* sin ropa: probador de looks y talleres de confección no se usan en este comercio */
- ['probador','taller'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});
+ ['probador','taller','pedidos'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});   /* pedidos = PedidosYa: este comercio reparte por cadetería y Correo Argentino */
 }catch(e){console.warn('menú base',e);}})();
+
+/* ===== 2026-11-10 · Menú del celular: nunca queda trabado abierto =====
+   En pantallas chicas el menú lateral tapa el botón ☰. Fondo que lo cierra al tocar afuera, botón «Cerrar menú», Esc,
+   y tocar el logo (aunque ya estés en el Resumen) o cualquier pantalla lo cierra. */
+(function(){
+ const close=()=>{const s=document.getElementById('side');if(s)s.classList.remove('open');};
+ function ensure(){let bd=document.getElementById('side-bd');if(!bd){bd=document.createElement('div');bd.id='side-bd';bd.setAttribute('aria-hidden','true');bd.addEventListener('click',close);document.body.appendChild(bd);}
+  const s=document.getElementById('side');if(!s)return;bd.classList.toggle('on',s.classList.contains('open'));
+  if(!s.querySelector('.side-x')){const b=document.createElement('button');b.type='button';b.className='side-x btn sm';b.textContent='✕ Cerrar menú';b.setAttribute('aria-label','Cerrar menú');b.addEventListener('click',close);s.insertBefore(b,s.firstChild);}}
+ const mo=new MutationObserver(ensure);
+ const start=()=>{const s=document.getElementById('side');if(!s){setTimeout(start,300);return;}ensure();mo.observe(s,{attributes:true,attributeFilter:['class'],childList:true});};
+ start();
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('#side a');if(!a)return;
+  if(a.classList.contains('brand')){e.preventDefault();close();try{go('inicio');}catch(x){location.hash='#panel/inicio';}return;}
+  setTimeout(close,0);},true);
+})();

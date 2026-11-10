@@ -495,6 +495,14 @@ html:not([data-theme=dark]) #side a.ux-pos-btn:hover,html:not([data-theme=dark])
 html:not([data-theme=dark]) #side a.ux-pos-btn.on svg,html:not([data-theme=dark]) #side a.ux-pos-btn:hover svg{stroke:#fff}
 html:not([data-theme=dark]) #side .ux-sec{color:#4F5A55;font-weight:700;letter-spacing:.04em}
 html:not([data-theme=dark]) #side .ux-sec:hover{color:#14302C;background:#F3F0E8}
+
+/* menú del celular: fondo para cerrarlo y botón «Cerrar menú» */
+#side-bd{display:none}
+#side .side-x{display:none}
+@media (max-width:900px){
+ #side-bd.on{display:block;position:fixed;inset:0;background:rgba(20,48,44,.35);z-index:29}
+ #side.open .side-x{display:block;width:calc(100% - .4rem);margin:0 .2rem .6rem;min-height:44px;background:#fff;color:#14302C;border:1px solid #E6E1D6}
+}
 </style></head>
 <body>
 <div id="app">
@@ -1355,7 +1363,7 @@ function uxTodayHTML(){const T=uxToday();const st=s=>s.fiado&&s.pstate&&s.pstate
  return `<section class="ux-today" aria-label="Hoy"><div class="grid g4">
  <div class="card kpi ux-k"><span>Ventas hoy</span><b>${money(T.hoy)}</b><small>${T.pct==null?'sin ventas ayer para comparar':(T.pct>=0?'▲ +':'▼ ')+String(T.pct).replace('.',',')+' % vs. ayer'}</small></div>
  <div class="card kpi ux-k"><span>Órdenes abiertas</span><b>${T.orders}</b><small>presupuestos vigentes, ventas a cobrar y pedidos</small></div>
- <div class="card kpi ux-k"><span>Pedidos delivery (PedidosYa)</span><b>${T.pya}</b><small>en curso</small></div>
+ <div class="card kpi ux-k"><span>Pedidos online por enviar</span><b>${(()=>{try{return NL().orders.filter(o=>!["entregado","cancelado","devuelto"].includes(o.status)).length;}catch(e){return 0;}})()}</b><small>cadetería y Correo Argentino</small></div>
  <div class="card kpi ux-k"><span>Stock alerta</span><b style="color:${T.low?'var(--red)':'inherit'}">${T.low}</b><small>productos con 5 o menos</small></div></div>
  <div class="ux-today-g"><div class="card"><h3 style="margin-top:0">Últimas ventas (POS)</h3>${T.last.length?`<ul class="ux-last">${T.last.map(s=>`<li><span><b>Venta ${esc(s.n||'')}</b><br><span class="sm mut">${money(s.total||0)} · ${crmHm?crmHm(s.ts):dmy(dkey(s.ts))}</span></span>${st(s)}</li>`).join('')}</ul>`:'<p class="sm mut">Todavía no hay ventas.</p>'}</div>
  <div><div class="card"><h3 style="margin-top:0">Tendencia de ventas (semana)</h3>${uxSpark(T.days,T.wk,T.prev)}<p class="sm mut" style="margin:0">Línea de color: últimos 7 días · línea punteada: semana anterior.</p>
@@ -6224,7 +6232,7 @@ reg('integ','Integraciones','plug','integrations',()=>{const I=S.integ,G=I.googl
  const prov=(k,t,desc)=>`<div class="card"><div class="row"><h3 class="sp">${t}</h3><span class="tag sim">${IS_CLIENT?'PENDIENTE DE CONFIGURACIÓN':'SIMULADO'}</span><span class="tag ${I[k].on?'ok':''}">${I[k].on?'Conectado (sandbox)':'No configurada'}</span></div><p class="sm mut">${desc}</p>
   <label for="fee-${k==='mp'?'qr':k}">Comisión del proveedor (%) — cargala desde tu contrato [VERIFICAR]</label><input id="fee-${k==='mp'?'qr':k}" data-fee="${k==='mp'?'qr':k}" inputmode="decimal" placeholder="0" value="${S.cfg.fee[k==='mp'?'qr':k]?esc(String(S.cfg.fee[k==='mp'?'qr':k]).replace('.',',')):''}" autocomplete="off">
   <div class="row" style="margin-top:.6rem"><button class="btn ${I[k].on?'':'gold'}" data-act="intToggle" data-k="${k}">${I[k].on?'Desconectar':'Conectar'}</button></div></div>`;
- return `<h1>Integraciones</h1><div class="warnbox">${IS_CLIENT?'Las conexiones externas (Mercado Pago, MODO, PedidosYa, Google) están <b>pendientes de configuración</b>: por ahora no envían nada. Las credenciales reales se cargan siempre en el servidor, nunca en este archivo.':'En esta demo las conexiones son <b>simuladas</b> para evaluar pantallas y flujos. Nada se envía a Mercado Pago, MODO, PedidosYa ni Google. Las credenciales reales irán siempre en el servidor, nunca en este archivo.'}</div>
+ return `<h1>Integraciones</h1><div class="warnbox">${IS_CLIENT?'Las conexiones externas (Mercado Pago, MODO, PedidosYa, Google) están <b>pendientes de configuración</b>: por ahora no envían nada. Las credenciales reales se cargan siempre en el servidor, nunca en este archivo.':'En esta demo las conexiones son <b>simuladas</b> para evaluar pantallas y flujos. Nada se envía a Mercado Pago, MODO, Correo Argentino ni Google. Las credenciales reales irán siempre en el servidor, nunca en este archivo.'}</div>
  <div class="grid g2">${prov('mp','Mercado Pago','Cobro por QR/checkout. Se crea la orden en el servidor y el webhook firmado confirma el pago. Registra monto bruto, comisión y neto.')}${prov('modo','MODO','Cobro con MODO, mismo esquema asíncrono: orden → webhook → bruto, comisión y neto en el cierre.')}${prov('pya','PedidosYa','Recepción de pedidos por webhook y cambio de estado. Tabla externa dedicada; la venta se registra al entregarse.')}
  <div class="card"><div class="row"><h3 class="sp">WhatsApp</h3><span class="tag ok">Funciona de verdad</span></div><p class="sm mut">Abre WhatsApp con el texto ya escrito; una persona lo revisa y lo envía. No es envío automático.</p>
   <label for="wa-n">WhatsApp del comercio (pedidos del menú), formato 549…</label><input id="wa-n" data-cfg="wa" value="${esc(S.tenant.wa)}" inputmode="numeric"><label for="wa-r">Destino del arqueo (opcional; vacío = elegís el contacto)</label><input id="wa-r" data-cfg="waReport" value="${esc(S.tenant.waReport||'')}" inputmode="numeric" placeholder="549…">
@@ -10210,7 +10218,13 @@ function urSideHTML(id){const cur=urItemOf(id);
  return h;}
 /* V26.61: los avisos de la barra se actualizan solos cada 5 s también en este menú */
 setInterval(()=>{try{if(!user||!$('#side')||$('#panel').hidden)return;urItems().forEach(sec=>sec.items.forEach(it=>{const a=document.querySelector('#side a[data-urk="'+it.key+'"] .ux-bdw');if(a){const h=urUxBadge(it);if(a.innerHTML!==h)a.innerHTML=h;}}));}catch(e){}},5000);
-function urAfter(id){if(id==='menuadmin'||id==='diseno'){$('#view').insertAdjacentHTML('afterbegin',`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con carrito y pedido por WhatsApp):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`);}return;
+function urNoPya(){try{const v=document.getElementById('view');if(!v)return;
+ v.querySelectorAll('option[value=pedidosya]').forEach(o=>o.remove());
+ v.querySelectorAll('[data-ent=pedidosya]').forEach(b=>{const tr=b.closest('tr');if(tr)tr.remove();});
+ v.querySelectorAll('h3,summary b,.ux-chip').forEach(h=>{if(h.textContent.trim()!=='PedidosYa')return;
+  if(h.classList.contains('ux-chip')){h.remove();return;}const c=h.closest('details')||h.closest('.card');if(c)c.remove();});
+}catch(e){}}
+function urAfter(id){urNoPya();if(id==='menuadmin'||id==='diseno'){$('#view').insertAdjacentHTML('afterbegin',`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con carrito y pedido por WhatsApp):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`);}return;
  /* (2026-11-10) las pestañas propias se reemplazan por la barra del sistema base */
  const key=urItemOf(id);if(!key)return;let it=null;urItems().forEach(s=>s.items.forEach(i=>{if(i.key===key)it=i;}));if(!it)return;
  /* V26.61: si la pantalla ya trae sus pestañas de grupo (Gestión de caja, Club), el menú muestra una sola pestaña para todo el grupo */
@@ -10495,8 +10509,25 @@ A.urVidDel=()=>{delete UR().video[URUI.ph.fam];save();urPhPaint();};
   moda:'Variantes y ubicaciones',ur_fotos:'Fotos y video',ur_envios:'Envíos y tarifas',cli360:'Cliente 360 y promos',ur_chat:'Mensajes',ur_mkt:'Campañas y audiencias',ur_ruleta:'Ruleta y gamificación',
   menuadmin:'Tienda online',diseno:'Diseño de la tienda',ur_tiktok:'TikTok',ur_igfb:'Instagram y Facebook',ur_wa:'WhatsApp',ur_gshop:'Google Shopping',ur_gpt:'ChatGPT Ads',ur_pin:'Pinterest',ur_mktp:'Marketplaces',ur_apps:'Aplicaciones'});
  /* sin ropa: probador de looks y talleres de confección no se usan en este comercio */
- ['probador','taller'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});
+ ['probador','taller','pedidos'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});   /* pedidos = PedidosYa: este comercio reparte por cadetería y Correo Argentino */
 }catch(e){console.warn('menú base',e);}})();
+
+/* ===== 2026-11-10 · Menú del celular: nunca queda trabado abierto =====
+   En pantallas chicas el menú lateral tapa el botón ☰. Fondo que lo cierra al tocar afuera, botón «Cerrar menú», Esc,
+   y tocar el logo (aunque ya estés en el Resumen) o cualquier pantalla lo cierra. */
+(function(){
+ const close=()=>{const s=document.getElementById('side');if(s)s.classList.remove('open');};
+ function ensure(){let bd=document.getElementById('side-bd');if(!bd){bd=document.createElement('div');bd.id='side-bd';bd.setAttribute('aria-hidden','true');bd.addEventListener('click',close);document.body.appendChild(bd);}
+  const s=document.getElementById('side');if(!s)return;bd.classList.toggle('on',s.classList.contains('open'));
+  if(!s.querySelector('.side-x')){const b=document.createElement('button');b.type='button';b.className='side-x btn sm';b.textContent='✕ Cerrar menú';b.setAttribute('aria-label','Cerrar menú');b.addEventListener('click',close);s.insertBefore(b,s.firstChild);}}
+ const mo=new MutationObserver(ensure);
+ const start=()=>{const s=document.getElementById('side');if(!s){setTimeout(start,300);return;}ensure();mo.observe(s,{attributes:true,attributeFilter:['class'],childList:true});};
+ start();
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('#side a');if(!a)return;
+  if(a.classList.contains('brand')){e.preventDefault();close();try{go('inicio');}catch(x){location.hash='#panel/inicio';}return;}
+  setTimeout(close,0);},true);
+})();
 
 /*UR-END*/
 (async()=>{if(typeof csIsRoute==='function'&&csIsRoute()){csBoot();return;} /* V26.49 · pantalla del cliente: modo mínimo, sin estado */
