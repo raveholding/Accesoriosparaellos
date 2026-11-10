@@ -84,3 +84,11 @@ html:not([data-theme=dark]) #side .brand img{width:38px!important;height:38px!im
 html:not([data-theme=dark]) #top>b{font-family:'Jost','Futura',Arial,sans-serif!important;font-weight:700!important;font-size:1rem!important;color:#14302C}
 html:not([data-theme=dark]) .lbox img{border-radius:20px!important}
 html:not([data-theme=dark]) input[type=checkbox],html:not([data-theme=dark]) input[type=radio],html:not([data-theme=dark]) input[type=range]{accent-color:#14302C}
+/* barra lateral del sistema base (V26.62) con la paleta del comercio */
+html:not([data-theme=dark]) #side a.ux-pos-btn{background:#B8924A!important;color:#14302C!important;border:0;font-weight:700;box-shadow:0 8px 20px rgba(184,146,74,.28)}
+html:not([data-theme=dark]) #side a.ux-pos-btn svg{stroke:#14302C}
+html:not([data-theme=dark]) #side a.ux-pos-btn .ux-kbd{background:rgba(20,48,44,.12);color:#14302C;border-color:rgba(20,48,44,.25)}
+html:not([data-theme=dark]) #side a.ux-pos-btn:hover,html:not([data-theme=dark]) #side a.ux-pos-btn.on{background:#A8823C!important;color:#fff!important}
+html:not([data-theme=dark]) #side a.ux-pos-btn.on svg,html:not([data-theme=dark]) #side a.ux-pos-btn:hover svg{stroke:#fff}
+html:not([data-theme=dark]) #side .ux-sec{color:#4F5A55;font-weight:700;letter-spacing:.04em}
+html:not([data-theme=dark]) #side .ux-sec:hover{color:#14302C;background:#F3F0E8}

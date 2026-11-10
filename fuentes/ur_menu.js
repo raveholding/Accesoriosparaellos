@@ -53,16 +53,16 @@ function UR(){if(!S.ur)S.ur={};const t=S.ur;
 const UR_SECS=[
  {t:'',items:[['inicio','Inicio','home',[['inicio','Resumen']]],['estad','Estadísticas','chart',[['bimoda','Tablero de moda'],['ur_stats','Ventas por canal']]]]},
  {t:'Gestión',items:[
-  ['ventas','Ventas','cart',[['ur_ventas','Todas las ventas'],['omni','Pedidos online y envíos'],['caja','Caja'],['arqueo','Arqueo / cierre'],['cierres','Cajas cerradas'],['cajasx','Sucursales']],'badgeVentas'],
-  ['prod','Productos','box',[['inventario','Inventario'],['moda','Talles y stock'],['ur_fotos','Fotos y video'],['proveedores','Proveedores y compras'],['taller','Talleres y producción'],['impex','Importar / Exportar']]],
+  ['ventas','Ventas','cart',[['ur_ventas','Todas las ventas'],['omni','Pedidos online y envíos'],['caja','Caja'],['arqueo','Arqueo / cierre'],['cierres','Cajas cerradas'],['presup','Presupuestos'],['mermas','Devoluciones y mermas'],['pedidos','Pedidos PedidosYa'],['cajasx','Sucursales']],'badgeVentas'],
+  ['prod','Productos','box',[['inventario','Inventario'],['moda','Stock por talle y ubicación'],['ur_fotos','Fotos y video'],['proveedores','Proveedores y compras'],['impex','Importar / Exportar']]],
   ['pago','Pago Nube','card',[['ur_pagos','Cobros y medios de pago']]],
   ['envio','Envío Nube','truck',[['ur_envios','Envíos y tarifas']],null,'Nuevo'],
-  ['cli','Clientes','users',[['clientes','Clientes'],['fidel','Club y sellos'],['fidplus','Niveles, cumpleaños y juegos'],['monedero','Monedero y gift cards']]],
+  ['cli','Clientes','users',[['clientes','Clientes'],['fidel','Club y sellos'],['fidplus','Niveles, cumpleaños y juegos'],['monedero','Monedero y gift cards'],['crm','Atención al cliente']]],
   ['desc','Descuentos','tag',[['cupones','Cupones y membresías'],['cli360','Promociones y Cliente 360']]],
   ['mkt','Marketing','mega',[['ur_mkt','Campañas y audiencias']]]]},
  {t:'Canales de venta',items:[
   ['tienda','Tienda online','store',[['menuadmin','Tienda pública'],['diseno','Diseño y estilo'],['integ','Tiendanube y conexiones'],['legal','Legal y cumplimiento']]],
-  ['pos','Punto de Venta','pos',[['vender','Vender'],['probador','Probador y looks'],['dispositivos','Periféricos y ticket']]],
+  ['pos','Punto de Venta','pos',[['vender','Vender'],['dispositivos','Periféricos y ticket']]],
   ['chat','Chat','chat',[['ur_chat','Mensajes']],'badgeChat'],
   ['igfb','Instagram y Facebook','ig',[['ur_igfb','Instagram y Facebook']]],
   ['gshop','Google Shopping','gshop',[['ur_gshop','Google Shopping']]],
@@ -76,21 +76,33 @@ const UR_SECS=[
   ['ruleta','Ruleta y Gamificación','dice',[['ur_ruleta','Ruleta y Gamificación']]],
   ['andreani','Andreani','parcel',[['ur_andreani','Andreani']]],
   ['correo','Correo Argentino','parcel',[['ur_correo','Correo Argentino']]]]},
- {t:'',items:[['config','Configuración','gear',[['config','General'],['roles','Usuarios y permisos'],['personal','Personal y fichaje'],['tareas','Tareas y organigrama'],['nube','Nube'],['auditoria','Auditoría']]]]}];
+ {t:'',items:[['config','Configuración','gear',[['config','General'],['roles','Usuarios y permisos'],['personal','Personal y fichaje'],['rrhh','Recursos Humanos'],['tareas','Tareas y organigrama'],['nube','Nube'],['auditoria','Auditoría']]]]}];
 const urOk=id=>{const s=SCREENS[id];return!!s&&(!s.perm||can(s.perm))&&(!s.show||s.show());};
 const urItems=()=>UR_SECS.map(sec=>({t:sec.t,items:sec.items.map(([key,t,icon,tabs,bd,tag])=>({key,t,icon,tabs:tabs.filter(x=>urOk(x[0])),bd,tag})).filter(i=>i.tabs.length)})).filter(s=>s.items.length);
 const urItemOf=id=>{for(const s of UR_SECS)for(const it of s.items)if(it[3].some(x=>x[0]===id))return it[0];return'';};
 const urBadge={badgeVentas:()=>{try{return NL().orders.filter(o=>['nuevo','pagado','picking','packing'].includes(o.state)).length;}catch(e){return 0;}},
  badgeChat:()=>UR().chat.reduce((a,c)=>a+(c.unread||0),0)};
+/* V26.61 · avisos en la barra (pedidos PedidosYa, stock bajo, conversaciones, caja de otro día, presupuestos por vencer) en el menú estilo Tienda Nube */
+function urUxBadge(it){try{if(typeof uxBadges!=='function')return'';const B=uxBadges();const ids=it.tabs.map(t=>t[0]);const L=Object.keys(B).filter(k=>ids.includes(k)).map(k=>B[k]);if(!L.length)return'';
+ L.sort((x,y)=>(y.c==='red')-(x.c==='red'));const x=Object.assign({},L[0],{n:L.reduce((a,y)=>a+y.n,0),t:L.map(y=>y.t).join(' · ')});return uxBadgeHTML(x);}catch(e){return'';}}
+setInterval(()=>{try{if(!user||!$('#side')||$('#panel').hidden)return;urItems().forEach(sec=>sec.items.forEach(it=>{const a=document.querySelector('#side a[data-urk="'+it.key+'"] .ux-bdw');if(!a)return;const h=urUxBadge(it);if(a.innerHTML!==h)a.innerHTML=h;}));}catch(e){}},5000);
 function urSideHTML(id){const cur=urItemOf(id);
  let h=`<a class="brand" href="#panel/inicio" title="Ir al Resumen" aria-label="Ir al Resumen" style="text-decoration:none"><img src="${LOGO_MENU}" alt="Urban" style="width:64px;height:25px;object-fit:contain;border-radius:0;background:#F4EFE7"><span>Sistema Urban</span></a>`;
  urItems().forEach(sec=>{if(sec.t)h+=`<div class="sec">${esc(sec.t)}</div>`;
   sec.items.forEach(it=>{const n=it.bd?urBadge[it.bd]():0;
-   h+=`<a data-act="nav" data-id="${it.tabs[0][0]}" class="${it.key===cur?'on':''}" tabindex="0" role="link">${ico(it.icon)}<span>${esc(it.t)}</span>${n?`<em class="ur-b">${n}</em>`:''}${it.tag?`<em class="ur-n">${esc(it.tag)}</em>`:''}</a>`;});});
- h+=`<div class="sec">Desarrollado por</div><div class="sm" style="padding:0 .7rem;color:#a99f8f"><b style="color:#eee">${VB.name}</b><br><i>“${VB.lema}”</i><br><a style="color:#0a0a0a" href="${vbWa()}" target="_blank" rel="noopener noreferrer">Único celular ${VB.phone}</a><br><a style="color:#0a0a0a" href="mailto:${VB.mail}">${VB.mail}</a></div>`;
+   h+=`<a data-act="nav" data-id="${it.tabs[0][0]}" data-urk="${esc(it.key)}" class="${it.key===cur?'on':''}" tabindex="0" role="link">${ico(it.icon)}<span>${esc(it.t)}</span>${n?`<em class="ur-b">${n}</em>`:''}<span class="ux-bdw">${urUxBadge(it)}</span>${it.tag?`<em class="ur-n">${esc(it.tag)}</em>`:''}</a>`;});});
+ h+=`<div class="sec">Desarrollado por</div><div class="sm" style="padding:0 .7rem;color:#a99f8f"><b style="color:#eee">${VB.name}</b><br><i>“${VB.lema}”</i><br><a style="color:#0a0a0a" href="${vbWa()}" target="_blank" rel="noopener noreferrer">WhatsApp ${VB.phone}</a><br><a style="color:#0a0a0a" href="mailto:${VB.mail}">${VB.mail}</a>${typeof vbWeb==='function'&&vbWeb()?'<br>'+vbWeb():''}</div>`;
  return h;}
-function urAfter(id){const key=urItemOf(id);if(!key)return;let it=null;urItems().forEach(s=>s.items.forEach(i=>{if(i.key===key)it=i;}));if(!it)return;
- let h='';if(it.tabs.length>1)h+=`<div class="rtabs ur-tabs">${it.tabs.map(([k,l])=>`<button class="rtab ${k===id?'on':''}" data-act="urGo" data-id="${k}">${esc(l)}</button>`).join('')}</div>`;
+/* V26.61: los avisos de la barra se actualizan solos cada 5 s también en este menú */
+setInterval(()=>{try{if(!user||!$('#side')||$('#panel').hidden)return;urItems().forEach(sec=>sec.items.forEach(it=>{const a=document.querySelector('#side a[data-urk="'+it.key+'"] .ux-bdw');if(a){const h=urUxBadge(it);if(a.innerHTML!==h)a.innerHTML=h;}}));}catch(e){}},5000);
+function urAfter(id){if(id==='menuadmin'||id==='diseno'){$('#view').insertAdjacentHTML('afterbegin',`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con carrito y pedido por WhatsApp):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`);}return;
+ /* (2026-11-10) las pestañas propias se reemplazan por la barra del sistema base */
+ const key=urItemOf(id);if(!key)return;let it=null;urItems().forEach(s=>s.items.forEach(i=>{if(i.key===key)it=i;}));if(!it)return;
+ /* V26.61: si la pantalla ya trae sus pestañas de grupo (Gestión de caja, Club), el menú muestra una sola pestaña para todo el grupo */
+ const ux=[...document.querySelectorAll('#view .ux-tabs [data-id]')].map(x=>x.dataset.id);
+ const GL={caja:'Caja',clientes:'Clientes y Club'};let tabs=it.tabs;
+ if(ux.length>1){const first=tabs.find(t=>ux.includes(t[0]));tabs=tabs.filter(t=>!ux.includes(t[0])||t===first).map(t=>t===first?[t[0],GL[t[0]]||t[1],1]:t);}
+ let h='';if(tabs.length>1)h+=`<div class="rtabs ur-tabs">${tabs.map(([k,l,g])=>`<button class="rtab ${(k===id||(g&&ux.includes(id)))?'on':''}" data-act="urGo" data-id="${k}">${esc(l)}</button>`).join('')}</div>`;
  if(key==='tienda')h+=`<div class="row ur-bar"><span class="sp sm mut">Tu tienda pública (catálogo con ficha de talle y carrito):</span><a class="btn sm" href="#menu" target="_blank" rel="noopener">Ver tienda</a><button class="btn sm" data-act="urCopyLink">Copiar link</button></div>`;
  if(h)$('#view').insertAdjacentHTML('afterbegin',h);}
 A.urGo=el=>go(el.dataset.id);
@@ -105,7 +117,7 @@ const UR_MET={efectivo:'Efectivo',debito:'Débito',credito:'Crédito',transferen
 reg('ur_ventas','Todas las ventas','cart','sell',()=>{const V=URUI.v;const since=dkey(now()-(V.days-1)*URMS);const q=asFold(V.q||'');
  const L=S.sales.filter(s=>dkey(s.ts)>=since&&(V.st==='all'||(V.st==='ok'?s.status==='ok':s.status!=='ok'))&&(V.ch==='all'||urChanOf(s)===V.ch)&&(!q||asFold((s.n||'')+' '+(s.custName||'')+' '+s.items.map(i=>i.name).join(' ')).includes(q))).sort((a,b)=>b.ts-a.ts);
  const ok=L.filter(s=>s.status==='ok');const tot=ok.reduce((a,s)=>a+s.total,0);const un=ok.reduce((a,s)=>a+s.items.reduce((b,i)=>b+i.qty,0),0);
- return urHead('Ventas')+`<div class="card"><div class="row ur-f" style="flex-wrap:wrap;gap:.5rem"><input id="uv-q" value="${esc(V.q)}" placeholder="Buscar por N.º, clienta o prenda" style="max-width:280px" data-chg="urVf" data-k="q">
+ return urHead('Ventas')+`<div class="card"><div class="row ur-f" style="flex-wrap:wrap;gap:.5rem"><input id="uv-q" value="${esc(V.q)}" placeholder="Buscar por N.º, cliente o producto" style="max-width:280px" data-chg="urVf" data-k="q">
   <select data-chg="urVf" data-k="days" aria-label="Período">${urOpts([['7','Últimos 7 días'],['30','Últimos 30 días'],['90','Últimos 90 días']],String(V.days))}</select>
   <select data-chg="urVf" data-k="ch" aria-label="Canal">${urOpts([['all','Todos los canales'],...Object.entries(UR_CH)],V.ch)}</select>
   <select data-chg="urVf" data-k="st" aria-label="Estado">${urOpts([['ok','Concretadas'],['x','Anuladas / pendientes'],['all','Todas']],V.st)}</select><span class="sp"></span><button class="btn sm" data-act="urVexp">Exportar CSV</button></div></div>
@@ -352,3 +364,21 @@ A.urPhDel=el=>{const ph=URUI.ph,o=UR().photos[ph.fam],l=o[ph.col];l.splice(+el.d
 A.urVidAdd=el=>{const f=el.files[0];if(!f)return;if(f.size>UR_VIDMAX){el.value='';return toast('El video pesa más de 5 MB: acortalo o comprimilo',1);}
  const fr=new FileReader();fr.onload=()=>{UR().video[URUI.ph.fam]=fr.result;audit('VIDEO_PRENDA',URUI.ph.fam);save();el.value='';toast('Video cargado');urPhPaint();};fr.onerror=()=>toast('No se pudo leer el video',1);fr.readAsDataURL(f);};
 A.urVidDel=()=>{delete UR().video[URUI.ph.fam];save();urPhPaint();};
+
+/* ===== 2026-11-10 · Barra lateral del SISTEMA BASE (V26.62: «Vender POS» arriba + secciones plegables) con los módulos de Accesorios para Ellos =====
+   Secciones: Resumen · Operación comercial · Logística e inventario · Clientes y Club · Equipo · Menú y web · Sistema. */
+(function(){try{
+ Object.assign(UX_SEC_OF,{
+  inicio:'Resumen',bimoda:'Resumen',ur_stats:'Resumen',
+  vender:'Operación comercial',ur_ventas:'Operación comercial',omni:'Operación comercial',ur_pagos:'Operación comercial',pedidos:'Operación comercial',
+  inventario:'Logística e inventario',moda:'Logística e inventario',ur_fotos:'Logística e inventario',proveedores:'Logística e inventario',presup:'Logística e inventario',mermas:'Logística e inventario',ur_envios:'Logística e inventario',ur_correo:'Logística e inventario',ur_andreani:'Logística e inventario',
+  crm:'Clientes',ur_chat:'Clientes',cli360:'Clientes',ur_ruleta:'Clientes',ur_mkt:'Clientes',
+  personal:'Equipo',rrhh:'Equipo',tareas:'Equipo',portal:'Equipo',
+  menuadmin:'Menú y web',diseno:'Menú y web',legal:'Menú y web',ur_tiktok:'Menú y web',ur_igfb:'Menú y web',ur_wa:'Menú y web',ur_gshop:'Menú y web',ur_gpt:'Menú y web',ur_pin:'Menú y web',ur_mktp:'Menú y web',
+  config:'Sistema',roles:'Sistema',dispositivos:'Sistema',integ:'Sistema',impex:'Sistema',auditoria:'Sistema',nube:'Sistema',ur_apps:'Sistema'});
+ Object.assign(UX_TITLE,{bimoda:'Tablero del negocio',ur_stats:'Ventas por canal',ur_ventas:'Todas las ventas',omni:'Pedidos online y envíos',ur_pagos:'Cobros y medios de pago',
+  moda:'Variantes y ubicaciones',ur_fotos:'Fotos y video',ur_envios:'Envíos y tarifas',cli360:'Cliente 360 y promos',ur_chat:'Mensajes',ur_mkt:'Campañas y audiencias',ur_ruleta:'Ruleta y gamificación',
+  menuadmin:'Tienda online',diseno:'Diseño de la tienda',ur_tiktok:'TikTok',ur_igfb:'Instagram y Facebook',ur_wa:'WhatsApp',ur_gshop:'Google Shopping',ur_gpt:'ChatGPT Ads',ur_pin:'Pinterest',ur_mktp:'Marketplaces',ur_apps:'Aplicaciones'});
+ /* sin ropa: probador de looks y talleres de confección no se usan en este comercio */
+ ['probador','taller'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});
+}catch(e){console.warn('menú base',e);}})();

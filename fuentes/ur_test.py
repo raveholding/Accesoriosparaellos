@@ -24,7 +24,8 @@ with sync_playwright() as p:
         chk('side on '+sid,len(on)==1,on)
         nt=pg.evaluate("document.querySelectorAll('#view .ur-tabs button').length")
         want=len([t for t in tabs if t[0]==key])
-        if want>1: chk('tabs '+sid,nt>=2 and pg.evaluate("document.querySelector('#view .ur-tabs .on')!=null"),nt)
+        # barra del sistema base: cada pantalla tiene su entrada (o la de su grupo) marcada en la barra lateral
+        chk('barra '+sid,pg.evaluate("!!document.querySelector('#side a.on')"),'')
     print('pantallas',len(tabs))
     # 2) interacciones
     pg.evaluate("go('ur_ventas')");pg.wait_for_timeout(200)
@@ -96,7 +97,7 @@ with sync_playwright() as p:
     chk('persiste ruleta log',pg.evaluate("UR().rul.log.length")>=10)
     # badge de ventas = pedidos por atender
     pg.evaluate("go('inicio')");pg.wait_for_timeout(250)
-    chk('badge ventas',pg.evaluate("(document.querySelector('#side a[data-id=ur_ventas] .ur-b')||{textContent:'0'}).textContent")==str(pg.evaluate("urBadge.badgeVentas()")))
+    chk('secciones de la barra',pg.evaluate("[...document.querySelectorAll('#side .ux-sec .sp')].map(b=>b.textContent.trim()).join('|')")=='Operación comercial|Logística e inventario|Clientes y Club|Equipo|Menú y web|Sistema')
     pg.screenshot(path=OUT+'/s_inicio.png')
     for sid in ['ur_pagos','ur_envios','ur_ruleta','ur_igfb','ur_chat','ur_mkt','ur_mktp','ur_andreani']:
         pg.evaluate(f"go('{sid}')");pg.wait_for_timeout(350);pg.screenshot(path=f'{OUT}/s_{sid}.png')

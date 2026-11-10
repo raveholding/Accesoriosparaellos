@@ -17,10 +17,8 @@ else:
     assert s.count(anchor)==1,('ancla',s.count(anchor))
     s=s.replace(anchor,block+anchor)
 # menú lateral
-if "innerHTML=urSideHTML(id)" not in s:
-    a=" $('#side').innerHTML=`"
-    i=s.index(a);j=s.index("`;\n",i)+2
-    s=s[:i]+" $('#side').innerHTML=urSideHTML(id);"+s[j:]
+# (2026-11-10) se usa la barra lateral del sistema base (uxSideHTML): ya no se reemplaza
+s=s.replace("'Clientes y fidelidad'):k;","'Clientes y Club'):k;")
 if "urAfter(id);$('#side')" not in s:
     a="sc.after&&sc.after();$('#side')"
     assert s.count(a)==1
