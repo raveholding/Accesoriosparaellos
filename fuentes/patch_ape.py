@@ -151,6 +151,11 @@ rep("  let loc=Math.floor(r()*6*pop),dep=Math.floor(r()*14*pop),onl=Math.floor(r
 rep('<div class="card kpi ux-k"><span>Pedidos delivery (PedidosYa)</span><b>${T.pya}</b><small>en curso</small></div>',
     '<div class="card kpi ux-k"><span>Pedidos online por enviar</span><b>${(()=>{try{return NL().orders.filter(o=>!["entregado","cancelado","devuelto"].includes(o.status)).length;}catch(e){return 0;}})()}</b><small>cadetería y Correo Argentino</small></div>')
 s=s.replace('Nada se envía a Mercado Pago, MODO, PedidosYa ni Google','Nada se envía a Mercado Pago, MODO, Correo Argentino ni Google')
+# Configuración guiada (una sección a la vez, menú agrupado, paso a paso, barra de cambios sin guardar)
+_cj=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'ap_config.js'),encoding='utf-8').read()
+if 'id="ap-config"' not in s:
+    _i=s.rfind('</body>');assert _i>0
+    s=s[:_i]+'<script id="ap-config">'+_cj+'</script>'+s[_i:]
 s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)

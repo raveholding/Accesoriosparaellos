@@ -508,6 +508,11 @@ function apHead(){if(q1('.ap-head'))return;var lg=q1('header .logo'),sheet=q1('.
   var h=document.createElement('div');h.className='ap-head';
   h.innerHTML='<img class="ap-logo" src="'+esc(src)+'" alt="'+apBrandName()+'"><div class="ap-bn"><b id="ap-title">'+apBrandName()+'</b><small>Estilo para todos los días</small></div><div class="ap-hi"><span id="ap-lang"></span><button type="button" class="ap-ib" id="ap-s" aria-label="Buscar">'+AP_ICO.search+'</button><button type="button" class="ap-ib" id="ap-c" aria-label="Ver mi pedido">'+AP_ICO.bag+'<i class="ap-bd" hidden>0</i></button></div>';
   sheet.insertBefore(h,sheet.firstChild);
+  /* acceso oculto al panel del equipo: doble clic (computadora) o doble toque (celular) sobre el logo o el nombre */
+  (function(){var last=0,go=function(e){if(e)e.preventDefault();try{window.parent.location.hash='#acceso';}catch(x){location.hash='#acceso';}};
+   [q1('.ap-logo',h),q1('#ap-title',h)].forEach(function(el){if(!el)return;el.style.webkitUserSelect='none';el.style.userSelect='none';el.style.webkitTouchCallout='none';
+    el.addEventListener('dblclick',go);
+    el.addEventListener('touchend',function(e){var t=Date.now();if(t-last<380){last=0;go(e);}else last=t;},{passive:false});});})();
   var lt=q1('header .lang-toggle');if(lt)q1('#ap-lang',h).appendChild(lt);
   q1('#ap-s',h).addEventListener('click',function(){var i=q1('#search-input');if(!i)return;i.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});setTimeout(function(){try{i.focus();}catch(e){}},300);});
   q1('#ap-c',h).addEventListener('click',apCart);

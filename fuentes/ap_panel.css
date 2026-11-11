@@ -100,3 +100,56 @@ html:not([data-theme=dark]) #side .ux-sec:hover{color:#14302C;background:#F3F0E8
  #side-bd.on{display:block;position:fixed;inset:0;background:rgba(20,48,44,.35);z-index:29}
  #side.open .side-x{display:block;width:calc(100% - .4rem);margin:0 .2rem .6rem;min-height:44px;background:#fff;color:#14302C;border:1px solid #E6E1D6}
 }
+/* ===== chip seleccionado legible en todas las pantallas (antes: texto verde sobre fondo verde) ===== */
+html:not([data-theme=dark]) .ux-chip.on{background:#14302C;border-color:#14302C;color:#fff}
+html[data-theme=dark] .ux-chip.on{background:#B8924A;border-color:#B8924A;color:#14302C}
+
+/* ===== Configuración guiada ===== */
+#view.cfg-pro .cfg-crumb{display:flex;justify-content:space-between;gap:.6rem;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8A6D1F;margin:-.2rem 0 .5rem}
+#view.cfg-pro .cfg-crumb .cfg-n{color:var(--mut);letter-spacing:.02em;text-transform:none;font-weight:500}
+#view.cfg-pro .cfg-step{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line)}
+#view.cfg-pro .cfg-step .btn{min-height:44px;max-width:100%;white-space:normal;text-align:left}
+#view.cfg-pro .cfg-enter{animation:cfgIn .22s ease-out both}
+@keyframes cfgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#view.cfg-pro .cfg-enter{animation:none}}
+#view.cfg-pro .ux-chip.cfg-dot::after{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#B8924A;margin-left:.45rem;vertical-align:middle;flex:none}
+.cfg-gt{display:none}
+/* barra de cambios sin guardar */
+#cfg-bar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:45;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;width:min(720px,calc(100% - 24px));padding:.7rem .9rem;border-radius:18px;background:#14302C;color:#fff;box-shadow:0 18px 40px rgba(20,48,44,.28);animation:cfgBar .2s ease-out}
+#cfg-bar[hidden]{display:none}
+#cfg-bar .sp{flex:1 1 220px;font-size:.9rem}
+#cfg-bar .btn{min-height:40px}
+#cfg-bar .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+#cfg-bar .btn.gold{background:#B8924A;border-color:#B8924A;color:#14302C}
+#cfg-bar .cfg-bdot{width:10px;height:10px;border-radius:50%;background:#B8924A;flex:none}
+@keyframes cfgBar{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){#cfg-bar{animation:none}}
+/* computadora: menú lateral agrupado + una sección a la vez */
+@media (min-width:1000px){
+ #view.cfg-pro{display:grid;grid-template-columns:270px minmax(0,1fr);column-gap:24px;align-items:start;grid-auto-flow:row dense}
+ #view.cfg-pro>*{grid-column:2;min-width:0}
+ #view.cfg-pro>.cfg-full{grid-column:1/-1}
+ #view.cfg-pro>#ux-secnav{grid-column:1;grid-row:span 60;position:sticky;top:calc(var(--toph,110px) + 12px);max-height:calc(100vh - var(--toph,110px) - 28px);overflow:auto;margin:0;padding:12px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 22px rgba(20,48,44,.06)}
+ #view.cfg-pro #ux-secnav .ux-secq{display:block}
+ #view.cfg-pro #ux-secnav #ux-sec-q{width:100%}
+ #view.cfg-pro #ux-secnav #ux-sec-res{display:block;margin-top:.35rem}
+ #view.cfg-pro #ux-secnav .ux-chips.cfg-rows{display:block;overflow:visible;padding:.3rem 0 0}
+ #view.cfg-pro .cfg-g{margin-top:.7rem}
+ #view.cfg-pro .cfg-gt{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#66706B;padding:0 .7rem .25rem}
+ #view.cfg-pro .cfg-g .ux-chip{display:flex;align-items:center;width:100%;min-height:40px;white-space:normal;text-align:left;border:0;border-radius:12px;background:transparent;padding:.45rem .7rem;font-size:.9rem;color:#2A3633}
+ #view.cfg-pro .cfg-g .ux-chip:hover{background:#F3F0E8;color:#14302C}
+ #view.cfg-pro .cfg-g .ux-chip.on{background:#14302C;color:#fff}
+ #view.cfg-pro .cfg-g-all{border-top:1px solid var(--line);padding-top:.6rem}
+ #view.cfg-pro .grid{grid-template-columns:1fr}
+}
+/* celular: accesos arriba en una fila deslizable, con el nombre del grupo como separador */
+@media (max-width:999px){
+ #view.cfg-pro .ux-chips.cfg-rows{display:flex;gap:.4rem}
+ #view.cfg-pro .cfg-g{display:contents}
+ #view.cfg-pro .cfg-step{flex-direction:column-reverse;align-items:stretch}
+ #view.cfg-pro .cfg-step .btn{width:100%;text-align:center}
+ #cfg-bar{bottom:10px}
+}
+
+.cfg-tf{display:none}
+@media (min-width:1000px){#view.cfg-pro .cfg-tf{display:inline}#view.cfg-pro .cfg-ts{display:none}}
