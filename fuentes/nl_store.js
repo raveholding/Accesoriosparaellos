@@ -506,7 +506,7 @@ function apCart(){var b=q1('#cart-bar');b&&b.click();}
 function apBrandName(){return 'Accesorios para Ellos';}
 function apHead(){if(q1('.ap-head'))return;var lg=q1('header .logo'),sheet=q1('.sheet');if(!sheet)return;var src=lg?lg.getAttribute('src'):'';
   var h=document.createElement('div');h.className='ap-head';
-  h.innerHTML='<img class="ap-logo" src="'+esc(src)+'" alt="'+apBrandName()+'"><div class="ap-bn"><b id="ap-title">'+apBrandName()+'</b><small>Estilo para todos los días</small></div><div class="ap-hi"><span id="ap-lang"></span><button type="button" class="ap-ib" id="ap-s" aria-label="Buscar">'+AP_ICO.search+'</button><button type="button" class="ap-ib" id="ap-c" aria-label="Ver mi pedido">'+AP_ICO.bag+'<i class="ap-bd" hidden>0</i></button></div>';
+  h.innerHTML='<img class="ap-logo" src="'+esc(src)+'" alt="'+apBrandName()+'"><div class="ap-bn"><b id="ap-title">'+apBrandName()+'</b><small>Estilo para todos los días</small></div><div class="ap-hi"><span id="ap-lang"></span><button type="button" class="ap-ib ap-app" id="ap-app" aria-label="Descargar la app" title="Descargar la app" hidden>'+AP_APPI+'</button><button type="button" class="ap-ib" id="ap-s" aria-label="Buscar">'+AP_ICO.search+'</button><button type="button" class="ap-ib" id="ap-c" aria-label="Ver mi pedido">'+AP_ICO.bag+'<i class="ap-bd" hidden>0</i></button></div>';
   sheet.insertBefore(h,sheet.firstChild);
   /* acceso oculto al panel del equipo: doble clic (computadora) o doble toque (celular) sobre el logo o el nombre */
   (function(){var last=0,go=function(e){if(e)e.preventDefault();try{window.parent.location.hash='#acceso';}catch(x){location.hash='#acceso';}};
@@ -575,14 +575,28 @@ function apInfo(){var old=q1('.ap-info');if(old)old.remove();var I=D&&D.info;if(
    (I.wa?'<a class="vi-wa" target="_blank" rel="noopener noreferrer" href="https://wa.me/'+encodeURIComponent(I.wa)+'?text='+encodeURIComponent('Hola, vi la tienda online y quiero consultar.')+'">'+AP_ICO.wa+'<span>Escribinos por WhatsApp</span></a>':'')+
    (I.map?'<a class="vi-map" target="_blank" rel="noopener noreferrer" href="'+esc(I.map)+'">Cómo llegar</a>':'')+'</div>';
   return w;}
+/* V26.69 · «Descargar la app» para el cliente: instala la app de la tienda (catálogo + tarjeta del Club + pedidos).
+   Usa la instalación del sistema base (window.parent.RAVE_APP): en Android/Chrome abre el instalador; en iPhone muestra los
+   3 pasos; dentro de Instagram/TikTok/WhatsApp explica cómo abrirla en el navegador. Ya instalada, no aparece. */
+var AP_APPI='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7.5v7m-3-3 3 3 3-3M10 18.5h4"/></svg>';
+function apAppApi(){try{return window.parent&&window.parent.RAVE_APP||null;}catch(e){return null;}}
+function apAppCan(){var a=apAppApi();try{return !!(a&&a.can());}catch(e){return false;}}
+function apAppGo(){var a=apAppApi();if(a)try{a.install();}catch(e){}}
+function apApp(){var old=q1('.ap-appc');if(old)old.remove();
+  var w=document.createElement('section');w.className='ap-appc';w.setAttribute('aria-label','Descargar la app');w.hidden=!apAppCan();
+  w.innerHTML='<div class="ap-appi" aria-hidden="true">'+AP_APPI+'</div><div class="ap-appt"><b>Llevá la tienda en tu celular</b><small>Catálogo, tu tarjeta del Club y el seguimiento de tus pedidos. Gratis, sin tiendas de apps.</small></div><button type="button" class="ap-appb">Descargar la app</button>';
+  return w;}
+function apAppSync(){var on=apAppCan();qa('#ap-app,.ap-appc').forEach(function(e){e.hidden=!on;});}
 function apBuild(){apHead();var tb=q1('#toolbar');if(!tb||!D)return;
-  var hero=apHero(),cats=apCats(),best=apBest();var tk=q1('.nl-tk'),me=q1('.nl-me'),tools=q1('.nl-tools');
-  var chain=[tb,hero,cats,tk,me,tools,best].filter(Boolean);var info=apInfo();
+  var hero=apHero(),cats=apCats(),best=apBest(),appc=apApp();var tk=q1('.nl-tk'),me=q1('.nl-me'),tools=q1('.nl-tools');
+  var chain=[tb,hero,cats,appc,tk,me,tools,best].filter(Boolean);var info=apInfo();
   for(var i=1;i<chain.length;i++){var prev=chain[i-1];prev.parentNode.insertBefore(chain[i],prev.nextSibling);}
   if(info){var cm=q1('#catalogo-menu');if(cm&&cm.parentNode)cm.parentNode.insertBefore(info,cm.nextSibling);else document.body.appendChild(info);}
   apNav();var nw=q1('#ap-nwa'),w0=q1('#nl-wa');if(nw){if(w0&&/wa\.me/.test(w0.href))nw.href=w0.href;else if(D&&D.wa)nw.href='https://wa.me/'+encodeURIComponent(D.wa);}
   apBadge();apSync();}
-function apWire(){apHeart();var cb=q1('#cb-count');if(cb)new MutationObserver(apBadge).observe(cb,{childList:true,characterData:true,subtree:true});
+function apWire(){apHeart();
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#ap-app,.ap-appb'))apAppGo();});
+  apAppSync();setInterval(apAppSync,2500);var cb=q1('#cb-count');if(cb)new MutationObserver(apBadge).observe(cb,{childList:true,characterData:true,subtree:true});
   var ci=q1('#cart-items');if(ci)new MutationObserver(apCartThumbs).observe(ci,{childList:true});
   var ov=q1('#cart-overlay');if(ov)new MutationObserver(apCartThumbs).observe(ov,{attributes:true});}
 function init(){

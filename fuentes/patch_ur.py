@@ -58,9 +58,8 @@ store_js=open(os.path.join(here,'nl_store.js'),encoding='utf-8').read()
 s=s[:st]+seg[:k]+jsq(store_css)+'<\\/style><script>'+jsq(store_js)+'<\\/script>'+s[e:]
 # ---- CSP: permitir video propio (data:/blob:) ----
 if 'media-src' not in s:
-    a="img-src data: blob:;"
-    assert s.count(a)==1
-    s=s.replace(a,a+" media-src data: blob:;")
+    m=re.search(r"img-src [^;]*;",s);assert m
+    s=s[:m.end()]+" media-src data: blob:;"+s[m.end():]
 # ---- logos (menú y ticket) ----
 def b64(f):return 'data:image/png;base64,'+base64.b64encode(open(os.path.join(here,f),'rb').read()).decode()
 m=re.search(r'const LOGO_MENU="(data:[^"]+)"',s);s=s.replace(m.group(1),b64('logo_menu.png'))

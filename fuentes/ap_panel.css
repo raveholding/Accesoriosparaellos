@@ -153,3 +153,16 @@ html[data-theme=dark] .ux-chip.on{background:#B8924A;border-color:#B8924A;color:
 
 .cfg-tf{display:none}
 @media (min-width:1000px){#view.cfg-pro .cfg-tf{display:inline}#view.cfg-pro .cfg-ts{display:none}}
+/* (V26.66+) elementos con fondo de marca: letra clara sobre el verde petróleo */
+html:not([data-theme=dark]) :is(.can-n,.cmp-tab b,.fk.gold,.hr-tabs button.on,.mlogo,.th-seg button[aria-pressed=true],.ux-av-i,.ux-chip.cg.on,#side .brand i){color:#fff}
+html:not([data-theme=dark]) .ux-chip.cg.on :is(small,.cg-t,span,b){color:rgba(255,255,255,.85)}
+html:not([data-theme=dark]) .ux-chip.cg.on b{color:#fff}
+html:not([data-theme=dark]) .th-seg button[aria-pressed=true] svg{stroke:#fff}
+
+/* Ingreso con Google (demo) */
+.ap-gwrap{margin-top:.8rem}
+.ap-gor{display:flex;align-items:center;gap:.6rem;color:var(--mut);font-size:.8rem;margin:.2rem 0 .7rem}
+.ap-gor::before,.ap-gor::after{content:'';flex:1;height:1px;background:var(--line)}
+.ap-gbtn{width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;gap:.6rem;background:#fff!important;color:#1f1f1f!important;border:1px solid #DADCE0!important;font-weight:600}
+.ap-gbtn:hover{background:#F8F9FA!important}
+.ap-gnote{margin:.45rem 0 0;text-align:center}

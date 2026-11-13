@@ -664,3 +664,13 @@ footer{background:transparent!important;color:#66706B!important}
 /* chat web del menú (V26.60) por encima del botón dorado y de la barra inferior */
 #rv-chat-fab{bottom:140px!important}
 #rv-chat{z-index:58!important}
+
+/* V26.69 · «Descargar la app» del cliente */
+.ap-appc{display:flex;align-items:center;gap:12px;margin:14px 16px 6px;padding:14px;border-radius:20px;background:#14302C;color:#fff;box-shadow:0 10px 26px rgba(20,48,44,.18)}
+.ap-appc[hidden]{display:none}
+.ap-appi{flex:none;width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#E9D3A2}
+.ap-appt{flex:1;min-width:0}.ap-appt b{display:block;font:600 15px/1.25 Jost,sans-serif}.ap-appt small{display:block;font-size:12.5px;line-height:1.35;opacity:.85;margin-top:2px}
+.ap-appb{flex:none;min-height:44px;padding:0 16px;border:0;border-radius:999px;background:#B8924A;color:#14302C;font:700 14px Jost,sans-serif;cursor:pointer}
+.ap-appb:focus-visible,#ap-app:focus-visible{outline:3px solid #E9D3A2;outline-offset:2px}
+#ap-app[hidden]{display:none}
+@media (max-width:380px){.ap-appc{flex-wrap:wrap}.ap-appb{width:100%}}

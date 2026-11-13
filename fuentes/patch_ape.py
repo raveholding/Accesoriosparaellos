@@ -66,7 +66,7 @@ for k in range(0,len(parts),2):
 s=''.join(parts)
 
 for a,b in [("{id:'d',name:'Display'},{id:'f',name:'Fardo'},{id:'p',name:'Pallet'}","{id:'d',name:'Pack x6'},{id:'f',name:'Caja x12'},{id:'p',name:'Bulto x48'}"),
- ("(Unidad, Display, Fardo, Pallet…)","(Unidad, Pack x6, Caja x12, Bulto x48…)"),("(Display, Fardo, Pallet…)","(Pack x6, Caja x12, Bulto x48…)"),
+ ("(Unidad, Display, Fardo, Pallet…)","(Unidad, Pack x6, Caja x12, Bulto x48…)"),("(Unidad, Display, Fardo…)","(Unidad, Pack x6, Caja x12…)"),("(Display, Fardo, Pallet…)","(Pack x6, Caja x12, Bulto x48…)"),
  ("Display/Fardo/Pallet","Pack/Caja/Bulto"),("«2 Pallet + 3 Fardo + 5 u»","«2 Bulto + 3 Caja + 5 u»")]:
     s=s.replace(a,b)
 s=s.replace('Vi%20el%20men%C3%BA%20digital%20de%20RAVE%20y%20quiero%20uno%20para%20mi%20negocio.','Vi%20la%20demo%20de%20Accesorios%20para%20Ellos%20(Sistema%20VB)%20y%20quiero%20una%20tienda%20as%C3%AD%20para%20mi%20negocio.')
@@ -151,11 +151,15 @@ rep("  let loc=Math.floor(r()*6*pop),dep=Math.floor(r()*14*pop),onl=Math.floor(r
 rep('<div class="card kpi ux-k"><span>Pedidos delivery (PedidosYa)</span><b>${T.pya}</b><small>en curso</small></div>',
     '<div class="card kpi ux-k"><span>Pedidos online por enviar</span><b>${(()=>{try{return NL().orders.filter(o=>!["entregado","cancelado","devuelto"].includes(o.status)).length;}catch(e){return 0;}})()}</b><small>cadetería y Correo Argentino</small></div>')
 s=s.replace('Nada se envía a Mercado Pago, MODO, PedidosYa ni Google','Nada se envía a Mercado Pago, MODO, Correo Argentino ni Google')
-# Configuración guiada (una sección a la vez, menú agrupado, paso a paso, barra de cambios sin guardar)
-_cj=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'ap_config.js'),encoding='utf-8').read()
-if 'id="ap-config"' not in s:
+# (2026-11-13) la Configuración por grupos ahora viene del sistema base (V26.66); fuentes/ap_config.js ya no se inyecta
+# V26.69 · en la tienda (#menu) se instala la app del CLIENTE (manifiesto del Club), no la del sistema
+rep("const appKind=()=>/^#(mitarjeta|tarjeta|sello=)/.test(location.hash||'')","const appKind=()=>/^#(mitarjeta|tarjeta|sello=|menu)/.test(location.hash||'')")
+rep("const name=kind==='club'?'la app del Club':'la app del sistema';","const name=kind==='club'?'la app de Accesorios para Ellos':'la app del sistema';")
+# Ingreso con Google en la demo sin nube: botón explicativo en el acceso y tarjeta en Configuración (fuentes/ap_google.js)
+_gj=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'ap_google.js'),encoding='utf-8').read()
+if 'id="ap-google"' not in s:
     _i=s.rfind('</body>');assert _i>0
-    s=s[:_i]+'<script id="ap-config">'+_cj+'</script>'+s[_i:]
+    s=s[:_i]+'<script id="ap-google">'+_gj+'</script>'+s[_i:]
 s=s.replace('const inj=`<script>try{sessionStorage','const inj=`<style>html:not(.ap-on) body{opacity:0}</style><script>try{sessionStorage',1)
 s=s.replace('display:block;background:#0a0a0a"></ifr','display:block;background:#F6F4EF"></ifr')
 open(path,'w',encoding='utf-8').write(s)
